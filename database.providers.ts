@@ -22,7 +22,7 @@ export const databaseProviders = [
         port: 5432,
         username: 'postgres',
         password: 'postgres',
-        database: 'sellou-database-local',
+        database: 'sellou_database_local',
       });
       sequelize.addModels([
         User,
