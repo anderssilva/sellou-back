@@ -1,4 +1,16 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  ForeignKey,
+  DataType,
+  BelongsTo, BelongsToMany
+} from "sequelize-typescript";
+import { SubCategory } from '../sub-category/sub-category.entity';
+import { OrderItems } from "../order-itens/order-items.entity";
+import { Order } from "../orders/order.entity";
+import { Promotion } from "../promotion/promotion.entity";
+import { PromotionProducts } from "../promotion_products/promotion_products.entity";
 
 @Table
 export class Product extends Model {
@@ -8,20 +20,18 @@ export class Product extends Model {
   @Column
   productDescription: string;
 
-  @Column
-  subProductDescription: string;
+  @ForeignKey(() => SubCategory)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  subProductCode: number;
 
   @Column
   productStatus: boolean;
 
   @Column
   productType: string;
-
-  @Column
-  productGroup: string;
-
-  @Column
-  productSubGroup: string;
 
   @Column
   productLine: string;
@@ -39,7 +49,7 @@ export class Product extends Model {
   packedShipment: boolean;
 
   @Column
-  invoiceStockUnit: boolean;
+  invoiceStockUnit: string;
 
   @Column
   unit: string;
@@ -55,4 +65,19 @@ export class Product extends Model {
 
   @Column
   productMultiple: number;
+
+  @Column
+  productDerivation: string;
+
+  @Column
+  productPrice: number;
+
+  @BelongsTo(() => SubCategory)
+  subCategory: SubCategory;
+
+  @BelongsToMany(() => Order, () => OrderItems)
+  orders: Order[];
+
+  @BelongsToMany(() => Promotion, () => PromotionProducts)
+  promotions: Promotion[];
 }

@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Order } from './order.entity';
+import { Inject, Injectable } from "@nestjs/common";
+import { Order } from "./order.entity";
 
 @Injectable()
 export class OrdersService {
@@ -11,7 +11,12 @@ export class OrdersService {
   async createOrder(orderData: Order): Promise<Order | string> {
     try {
       return await this.orderRepository.create({
-        Client: orderData.Client,
+        representativeId: 1,
+        paymentConditionId: orderData.paymentConditionId,
+        clientId: orderData.clientId,
+        priceTableId: orderData.priceTableId,
+        paymentFormId: orderData.paymentFormId,
+        observationOrder: orderData.observationOrder,
       });
     } catch (e) {
       return e;
@@ -20,7 +25,7 @@ export class OrdersService {
 
   async getOrders(): Promise<Order[] | string> {
     try {
-      return await this.orderRepository.findAll();
+      return await this.orderRepository.findAll({ include: { all: true } })
     } catch (e) {
       return e;
     }
@@ -61,7 +66,7 @@ export class OrdersService {
     try {
       return await this.orderRepository
         .findOne({
-          where: { representativeCod: order.representativeCod, id: order.id },
+          where: { representativeCod: order.representativeId, id: order.id },
         })
         .then((result) => {
           return result.update(order);
@@ -74,10 +79,26 @@ export class OrdersService {
   async deleteOrder(order: Order): Promise<number | string> {
     try {
       return await this.orderRepository.destroy({
-        where: { representativeCod: order.representativeCod, id: order.id },
+        where: { representativeCod: order.representativeId, id: order.id },
       });
     } catch (e) {
       return e;
     }
   }
+
+  async gerLastOrderByRep(id: number): Promise<Order | string> {
+    try {
+      const order = await this.orderRepository.findOne({
+        where: { representativeId: id },
+        order: [['id', 'DESC']],
+        include: [{ all: true }]
+      });
+
+
+      return order || 'No order found';
+    } catch (e) {
+      return e.message || e.toString();
+    }
+  }
 }
+

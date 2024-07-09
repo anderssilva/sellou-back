@@ -8,9 +8,11 @@ export class ProductController {
 
   @Post('create')
   async createProduct(@Body() productData: Product): Promise<Product | string> {
+    console.log(productData);
     try {
       return await this.productService.createProduct(productData);
     } catch (e) {
+      console.log('aqui', e);
       return e;
     }
   }

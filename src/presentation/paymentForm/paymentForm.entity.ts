@@ -2,12 +2,12 @@ import { Table, Column, Model, HasMany } from 'sequelize-typescript';
 import { Order } from '../orders/order.entity';
 
 @Table
-export class PriceTable extends Model {
+export class PaymentForm extends Model {
   @Column
-  codPriceTable: string;
+  paymentFormCod: number;
 
   @Column
-  priceTableDescription: string;
+  paymentFormDescription: string;
 
   @HasMany(() => Order)
   orders: Order[];

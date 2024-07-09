@@ -11,7 +11,8 @@ export class PriceTableService {
   async createPriceTable(priceTableData: PriceTable): Promise<PriceTable> {
     try {
       return await this.priceTableRepository.create({
-        companyName: priceTableData.codTable,
+        codPriceTable: priceTableData.codPriceTable,
+        priceTableDescription: priceTableData.priceTableDescription,
       });
     } catch (e) {
       return e;

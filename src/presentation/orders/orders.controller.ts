@@ -81,4 +81,13 @@ export class OrdersController {
       return e;
     }
   }
+
+  @Get('find-last')
+  async gerLastOrderByRep(@Query() params: any): Promise<Order | string> {
+    try {
+      return await this.orderService.gerLastOrderByRep(params.id);
+    } catch (e) {
+      return e;
+    }
+  }
 }

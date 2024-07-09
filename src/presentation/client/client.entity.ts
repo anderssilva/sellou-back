@@ -1,4 +1,5 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany } from 'sequelize-typescript';
+import { Order } from '../orders/order.entity';
 
 @Table
 export class Client extends Model {
@@ -145,4 +146,7 @@ export class Client extends Model {
 
   @Column
   minimumOrder: number;
+
+  @HasMany(() => Order)
+  orders: Order[];
 }
