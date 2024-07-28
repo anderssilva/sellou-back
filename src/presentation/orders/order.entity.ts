@@ -6,7 +6,7 @@ import {
   BelongsTo, BelongsToMany
 } from "sequelize-typescript";
 import { PaymentCondition } from '../payment-condition/payment-condition.entity';
-import { User } from '../../user/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { Client } from '../client/client.entity';
 import { PriceTable } from "../priceTables/priceTable.entity";
 import { PaymentForm } from "../paymentForm/paymentForm.entity";

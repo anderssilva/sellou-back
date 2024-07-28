@@ -1,5 +1,5 @@
 import { Table, Column, Model, HasMany } from "sequelize-typescript";
-import { Order } from "../presentation/orders/order.entity";
+import { Order } from "../../presentation/orders/order.entity";
 
 @Table
 export class User extends Model {
