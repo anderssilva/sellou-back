@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+ import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { jwtConstants } from 'jwt.constants';
+ import { AuthLoginDto } from './dtos/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,26 +13,28 @@ export class AuthService {
     private userRepository: typeof User,
   ) {}
 
-  async login(email: string, password: string) {
+  async login(credentials: AuthLoginDto) {
     const secret = jwtConstants.secret;
     const exp = Math.floor(Date.now() / 1000) + 60 * 60;
-    const result = await this.userRepository.findOne({
-      where: { email: email },
+
+    const user = await this.userRepository.findOne({
+      where: { email: credentials.email },
     });
 
-    if (!result || !bcrypt.compareSync(password, result.password)) {
-      return { error: true, msg: 'Login ou password inválido!' };
+    if (!user || !bcrypt.compareSync(credentials.password, user.password)) {
+      throw new UnauthorizedException('Email ou senha inválidos!');
     }
 
-    // if(result.status === false) {
-    //   res.status(200).send({error: true, msg: 'Essa conta ainda não foi ativada'})
-    //   return
+    // if(user.status === false) { //todo
+    //   throw new UnauthorizedException('Essa conta ainda não foi ativada');
     // }
 
-    const payload = { email: result.email, id: result.id, secret };
+    const payload = { email: user.email, id: user.id, secret };
     return {
       access_token: this.jwtService.sign(payload, { expiresIn: exp }),
-      idRole: result.idRole,
+      idRole: user.idRole,
+      userName: user.name,
+      email: user.email
     };
   }
 }

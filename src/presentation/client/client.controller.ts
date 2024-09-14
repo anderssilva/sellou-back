@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Post, Query } from "@nestjs/common";
 import { ClientService } from './client.service';
+import { CreateClientDto } from './dtos/client.dto';
 import { Client } from './client.entity';
 
 @Controller('client')
@@ -7,7 +8,7 @@ export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
   @Post('create')
-  async createUser(@Body() clientData: Client): Promise<Client> {
+  async createUser(@Body() clientData: CreateClientDto): Promise<Client> {
     try {
       return await this.clientService.createClient(clientData);
     } catch (e) {
@@ -26,7 +27,7 @@ export class ClientController {
   }
 
   @Delete('delete-one')
-  async deleteClient(@Query() param: any): Promise<Client> {
+  async deleteClient(@Query() param: any): Promise<any> {
     return await this.clientService.deleteClient(param.id);
   }
 }
