@@ -1,5 +1,5 @@
 import { Table, Column, Model, HasMany, PrimaryKey, AutoIncrement, BeforeCreate } from "sequelize-typescript";
-import { Order } from "../../presentation/orders/order.entity";
+import { Order } from "../../presentation/orders/entities/order.entity";
 import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from "class-validator";
 import * as bcrypt from 'bcrypt';
 
@@ -51,6 +51,9 @@ export class User extends Model {
 
   @Column
   company: number;
+
+  @Column
+  representativeId: number
 
   @HasMany(() => Order)
   orders: Order[];

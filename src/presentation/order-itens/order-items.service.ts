@@ -17,11 +17,8 @@ export class OrderItemsService {
         itemPrice: orderItemsData.itemPrice,
         itemAmount: orderItemsData.itemAmount,
         orderId: orderItemsData.orderId,
-        tablePrice: orderItemsData.tablePrice,
-        paymentTerms: orderItemsData.paymentTerms,
         weightTotalPrice: orderItemsData.weightTotalPrice,
         itemDiscount: orderItemsData.itemDiscount,
-        conditionPaymentCod: orderItemsData.conditionPaymentCod,
       });
     } catch (e) {
       return e;

@@ -8,7 +8,7 @@ import {
 } from "sequelize-typescript";
 import { SubCategory } from '../sub-category/sub-category.entity';
 import { OrderItems } from "../order-itens/order-items.entity";
-import { Order } from "../orders/order.entity";
+import { Order } from "../orders/entities/order.entity";
 import { Promotion } from "../promotion/promotion.entity";
 import { PromotionProducts } from "../promotion_products/promotion_products.entity";
 

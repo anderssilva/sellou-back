@@ -1,25 +1,40 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { Order } from "./order.entity";
+import { Inject, Injectable } from '@nestjs/common';
+import { Order } from './entities/order.entity';
+import { CreateOrderDto } from './dtos/order.dto';
+import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from 'jwt.constants';
+import { OrderItems } from '../order-itens/order-items.entity';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class OrdersService {
   constructor(
+    private readonly jwtService: JwtService,
     @Inject('ORDER_REPOSITORY')
     private orderRepository: typeof Order,
+    @Inject('ORDER_ITEMS_REPOSITORY') private readonly orderItemsRepository: typeof OrderItems,
   ) {}
 
-  async createOrder(orderData: Order): Promise<Order | string> {
+  async createOrder(orderData: CreateOrderDto, token: string): Promise<Order | string> {
     try {
-      return await this.orderRepository.create({
-        representativeId: 1,
-        paymentConditionId: orderData.paymentConditionId,
-        clientId: orderData.clientId,
-        priceTableId: orderData.priceTableId,
-        paymentFormId: orderData.paymentFormId,
-        observationOrder: orderData.observationOrder,
+      const decodedToken = jwt.verify(token, jwtConstants.secret);
+      orderData.representativeId = decodedToken['r'];
+
+      const order = await this.orderRepository.create({
+        ...orderData
       });
-    } catch (e) {
-      return e;
+
+      const items = orderData.products.map((result) => ({
+        ...result,
+        orderId:   order.id
+      }))
+
+      await this.orderItemsRepository.bulkCreate(items)
+
+      return order;
+    } catch (e: any) {
+      return e.message;
     }
   }
 
@@ -31,9 +46,12 @@ export class OrdersService {
     }
   }
 
-  async getOrderById(id: number): Promise<Order | string> {
+  async getOrderById(id: number): Promise<Order> {
     try {
-      return await this.orderRepository.findOne({ where: { id: id } });
+      return await this.orderRepository.findOne({
+        where: { id: id },
+        include: [{ model: OrderItems }]
+      });
     } catch (e) {
       return e;
     }

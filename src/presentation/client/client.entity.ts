@@ -1,5 +1,5 @@
 import { Table, Column, Model, HasMany, PrimaryKey, AutoIncrement } from "sequelize-typescript";
-import { Order } from '../orders/order.entity';
+import { Order } from '../orders/entities/order.entity';
 import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 @Table

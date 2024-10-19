@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import { User } from './src/user/entities/user.entity';
 import { Client } from './src/presentation/client/client.entity';
-import { Order } from './src/presentation/orders/order.entity';
+import { Order } from './src/presentation/orders/entities/order.entity';
 import { PriceTable } from './src/presentation/priceTables/priceTable.entity';
 import { PaymentForm } from './src/presentation/paymentForm/paymentForm.entity';
 import { PaymentCondition } from './src/presentation/payment-condition/payment-condition.entity';

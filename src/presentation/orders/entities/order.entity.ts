@@ -3,15 +3,15 @@ import {
   Column,
   Model,
   ForeignKey,
-  BelongsTo, BelongsToMany
+  BelongsTo, BelongsToMany, HasMany
 } from "sequelize-typescript";
-import { PaymentCondition } from '../payment-condition/payment-condition.entity';
-import { User } from '../../user/entities/user.entity';
-import { Client } from '../client/client.entity';
-import { PriceTable } from "../priceTables/priceTable.entity";
-import { PaymentForm } from "../paymentForm/paymentForm.entity";
-import { OrderItems } from "../order-itens/order-items.entity";
-import { Product } from "../products/product.entity";
+import { PaymentCondition } from '../../payment-condition/payment-condition.entity';
+import { User } from '../../../user/entities/user.entity';
+import { Client } from '../../client/client.entity';
+import { PriceTable } from "../../priceTables/priceTable.entity";
+import { PaymentForm } from "../../paymentForm/paymentForm.entity";
+import { OrderItems } from "../../order-itens/order-items.entity";
+import { Product } from "../../products/product.entity";
 
 @Table
 export class Order extends Model {
@@ -77,6 +77,6 @@ export class Order extends Model {
   @BelongsTo(() => PaymentForm)
   paymentForm: PaymentForm;
 
-  @BelongsToMany(() => Product, () => OrderItems)
-  products: Product[];
+  @HasMany(() => OrderItems)
+  orderItems: OrderItems[];
 }

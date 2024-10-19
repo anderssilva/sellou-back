@@ -42,6 +42,7 @@ import { ProductController } from './presentation/products/product.controller';
 import { ProductProviders } from './presentation/products/product.providers';
 import { ProductService } from './presentation/products/product.service';
 import { VenomIntegrationModule } from "./presentation/comunication/venom-integration/venom-integration.module";
+import { SequelizeModule } from '@nestjs/sequelize';
 // import { VenomIntegrationController } from "./presentation/comunication/venom-integration/venom-integration.controller";
 // import { VenomIntegrationService } from "./presentation/comunication/venom-integration/venom-integration.service";
 import { PromotionModule } from './presentation/promotion/promotion.module';
@@ -71,7 +72,8 @@ import { PromotionProductsService } from "./presentation/promotion_products/prom
     OrderItemsModule,
     VenomIntegrationModule,
     PromotionModule,
-    PromotionProductsModule
+    PromotionProductsModule,
+    SequelizeModule
   ],
   controllers: [
     UserController,

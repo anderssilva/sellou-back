@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { Promotion } from "../promotion/promotion.entity";
 import { Product } from "../products/product.entity";
 import { PromotionProducts } from "./promotion_products.entity";
-import { Order } from "../orders/order.entity";
+import { Order } from "../orders/entities/order.entity";
 
 @Injectable()
 export class PromotionProductsService {

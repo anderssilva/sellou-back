@@ -1,25 +1,30 @@
 import {
+  Headers,
   Body,
   Controller,
   Delete,
   Get,
   Post,
   Put,
-  Query,
-} from '@nestjs/common';
+  Query, Param
+} from "@nestjs/common";
 import { OrdersService } from './orders.service';
-import { Order } from './order.entity';
+import { Order } from './entities/order.entity';
+import { CreateOrderDto } from "./dtos/order.dto";
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly orderService: OrdersService) {}
 
   @Post('create')
-  async createOrder(@Body() orderData: Order): Promise<Order | string> {
+  async createOrder(
+    @Body() orderData: CreateOrderDto,
+    @Headers('Authorization') authHeader: string): Promise<Order | string> {
     try {
-      return await this.orderService.createOrder(orderData);
-    } catch (e) {
-      return e;
+      const token = authHeader.split(' ')[1];
+      return await this.orderService.createOrder(orderData, token);
+    } catch (e: any) {
+      return e.message;
     }
   }
 
@@ -33,9 +38,9 @@ export class OrdersController {
   }
 
   @Get('find-one')
-  async getOrderById(@Query() id: number): Promise<Order | string> {
+  async getOrderById(@Query()  params: { id: number }): Promise<Order> {
     try {
-      return await this.orderService.getOrderById(id);
+      return await this.orderService.getOrderById(params.id);
     } catch (e) {
       return e;
     }
