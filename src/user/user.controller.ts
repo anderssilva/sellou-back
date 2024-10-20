@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post, Put, Delete, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Delete, UsePipes, ValidationPipe, Headers } from "@nestjs/common";
 import { UserService } from './user.service';
 import { CreateUserDto } from "./dtos/user.dto";
+import { Order } from "../presentation/orders/entities/order.entity";
 
 @Controller('user')
 export class UserController {
@@ -8,8 +9,14 @@ export class UserController {
 
   @Post('create')
   @UsePipes(new ValidationPipe({ whitelist: true }))
-  async register(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+  async register(@Body() createUserDto: CreateUserDto,
+  @Headers('Authorization') authHeader: string): Promise<Order | string>{
+    try {
+      const token = authHeader.split(' ')[1];
+      await this.userService.createUser(createUserDto, token);
+    } catch (e: any) {
+      return e.message;
+    }
   }
 
   @Get(':id')
@@ -20,6 +27,12 @@ export class UserController {
   @Get()
   async getAllUsers() {
     return this.userService.getAllUsers();
+  }
+  @Get('/a/company-users')
+  async getAllCompanyUsers(
+    @Headers('Authorization') authHeader: string) {
+    const token = authHeader.split(' ')[1];
+    return this.userService.getAllCompanyUsers(token);
   }
 
   @Put(':id')

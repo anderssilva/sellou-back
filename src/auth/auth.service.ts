@@ -29,7 +29,7 @@ export class AuthService {
     //   throw new UnauthorizedException('Essa conta ainda não foi ativada');
     // }
 
-    const payload = { email: user.email, id: user.id, r: user.representativeId, secret };
+    const payload = { email: user.email, id: user.id, r: user.representativeId, company: user.company };
     return {
       access_token: this.jwtService.sign(payload, { expiresIn: exp }),
       idRole: user.idRole,

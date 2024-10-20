@@ -1,15 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from "./dtos/user.dto";
+import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from "../../jwt.constants";
+import * as jwt from "jsonwebtoken";
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: typeof User,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async createUser(userData: CreateUserDto): Promise<CreateUserDto> {
+  async createUser(userData: CreateUserDto, token: string): Promise<CreateUserDto> {
+    const decodedToken = this.jwtService.verify(token);
+
     const user = await this.userRepository.create({
       name: userData.name,
       document: userData.document,
@@ -19,6 +25,7 @@ export class UserService {
       state: userData.state,
       password: userData.password,
       idRole: userData.idRole,
+      company: userData.idRole == 3 ? decodedToken['company'] : null
     });
 
     const userWithoutPassword = user.toJSON();
@@ -26,14 +33,18 @@ export class UserService {
 
     return userWithoutPassword;
   }
-
-  // Read
   async getUserById(id: number): Promise<User> {
     return await this.userRepository.findByPk(id);
   }
 
   async getAllUsers(): Promise<User[]> {
     return await this.userRepository.findAll();
+  }
+
+  async getAllCompanyUsers(token: string): Promise<User[]> {
+    const decodedToken = jwt.verify(token, jwtConstants.secret);
+    console.log('decodedToken', decodedToken)
+    return await this.userRepository.findAll({ where: { company: decodedToken['company'] } });
   }
 
   async updateUser(id: number, updateData: CreateUserDto): Promise<User> {

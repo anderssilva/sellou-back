@@ -53,6 +53,8 @@ import { PromotionProductsModule } from "./presentation/promotion_products/promo
 import { PromotionProductsController } from "./presentation/promotion_products/promotion_products.controller";
 import { PromotionProductProviders } from "./presentation/promotion_products/promotion_products.providers";
 import { PromotionProductsService } from "./presentation/promotion_products/promotion_products.service";
+import { JwtModule } from "@nestjs/jwt";
+import { jwtConstants } from "../jwt.constants";
 
 @Module({
   imports: [
@@ -73,7 +75,12 @@ import { PromotionProductsService } from "./presentation/promotion_products/prom
     VenomIntegrationModule,
     PromotionModule,
     PromotionProductsModule,
-    SequelizeModule
+    SequelizeModule,
+    JwtModule,
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '1h' },
+    })
   ],
   controllers: [
     UserController,
@@ -114,6 +121,7 @@ import { PromotionProductsService } from "./presentation/promotion_products/prom
     ProductService,
     PromotionService,
     PromotionProductsService
+
     // VenomIntegrationService,
   ],
   exports: [...databaseProviders],
