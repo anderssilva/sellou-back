@@ -43,7 +43,6 @@ export class UserService {
 
   async getAllCompanyUsers(token: string): Promise<User[]> {
     const decodedToken = jwt.verify(token, jwtConstants.secret);
-    console.log('decodedToken', decodedToken)
     return await this.userRepository.findAll({ where: { company: decodedToken['company'] } });
   }
 
