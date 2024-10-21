@@ -7,7 +7,6 @@ import { UserController } from './user/user.controller';
 import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './presentation/category/category.module';
 import { ConfigurationModule } from './configuration/configuration.module';
-import { ReportModule } from './report/report.module';
 import { CrmModule } from './crm/crm.module';
 import { ClientModule } from './presentation/client/client.module';
 import { ClientController } from './presentation/client/client.controller';
@@ -62,7 +61,6 @@ import { jwtConstants } from "../jwt.constants";
     AuthModule,
     CategoryModule,
     ConfigurationModule,
-    ReportModule,
     CrmModule,
     ClientModule,
     OrdersModule,
