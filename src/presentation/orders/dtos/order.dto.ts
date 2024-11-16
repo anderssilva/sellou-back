@@ -6,7 +6,7 @@ export class CreateOrderDto {
   @IsNotEmpty()
   @IsNumber()
   orderStatus: number;
-
+  id?: number;
   validityOrder: Date;
   bilingDate: Date;
   bilingType: string;

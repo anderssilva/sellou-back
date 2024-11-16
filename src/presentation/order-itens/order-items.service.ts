@@ -14,7 +14,7 @@ export class OrderItemsService {
     try {
       return await this.orderItemsRepository.create({
         productId: orderItemsData.productId,
-        itemPrice: orderItemsData.itemPrice,
+        itemPrice: orderItemsData.productPrice,
         itemAmount: orderItemsData.itemAmount,
         orderId: orderItemsData.orderId,
         weightTotalPrice: orderItemsData.weightTotalPrice,

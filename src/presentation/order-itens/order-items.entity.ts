@@ -16,7 +16,7 @@ export class OrderItems extends Model {
   itemDiscount: number;
 
   @Column
-  itemPrice: number;
+  productPrice: number;
 
   @Column
   itemAmount: number;

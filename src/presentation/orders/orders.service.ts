@@ -21,18 +21,46 @@ export class OrdersService {
       const decodedToken = jwt.verify(token, jwtConstants.secret);
       orderData.representativeId = decodedToken['r'];
 
-      const order = await this.orderRepository.create({
-        ...orderData
-      });
+      if(orderData?.id) {
+        let order = await this.orderRepository.findOne({
+          where: { id: orderData?.id }
+        });
 
-      const items = orderData.products.map((result) => ({
-        ...result,
-        orderId:   order.id
-      }))
+        await this.orderRepository.update(orderData, {
+          where: { id: orderData.id }
+        });
 
-      await this.orderItemsRepository.bulkCreate(items)
+        await this.orderItemsRepository.destroy({
+          where: { orderId: order.id }
+        });
 
-      return order;
+        const items = orderData.products.map((result) => ({
+          ...result,
+          orderId:   order.id
+        }))
+
+        await this.orderItemsRepository.bulkCreate(items)
+
+        return order;
+
+      } else {
+        let order = await this.orderRepository.create({
+          ...orderData
+        });
+
+        await this.orderItemsRepository.destroy({
+          where: { orderId: order.id }
+        });
+
+        const items = orderData.products.map((result) => ({
+          ...result,
+          orderId:   order.id
+        }))
+
+        await this.orderItemsRepository.bulkCreate(items)
+
+        return order;
+      }
     } catch (e: any) {
       return e.message;
     }
@@ -107,12 +135,10 @@ export class OrdersService {
   async gerLastOrderByRep(id: number): Promise<Order | string> {
     try {
       const order = await this.orderRepository.findOne({
-        where: { representativeId: id },
+        where: { clientId: id },
         order: [['id', 'DESC']],
         include: [{ all: true }]
       });
-
-
       return order || 'No order found';
     } catch (e) {
       return e.message || e.toString();
